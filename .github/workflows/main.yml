@@ -1,0 +1,23 @@
+name: Cleanup Repo
+
+on:
+  workflow_dispatch: # manuell starten
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Delete all non-Markdown files
+        run: |
+          find . -type f ! -name "*.md" ! -name "LICENSE" ! -name "README.md" -delete
+          find . -type d -empty -delete
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Remove all non-Markdown files"
+          git push
